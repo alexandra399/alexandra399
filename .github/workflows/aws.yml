@@ -1,0 +1,428 @@
+# Th<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameOn - Your Gaming Universe</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden; /* Prevent scrolling during preload */
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Preloader styles */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .running-dog {
+      width: 100px;
+      height: auto;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* 3D Hover effect */
+    nav ul li a {
+      display: inline-block;
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 10px 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    nav ul li a:hover {
+      transform: perspective(300px) rotateX(10deg);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Cookie Banner styles */
+    .cookie-banner {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cookie-banner button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .cookie-banner button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Background color picker */
+    #background-color-picker {
+      position: fixed;
+      bottom: 70px;
+      left: 10px;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Audio for fantasy sound -->
+  <audio id="fantasySound" src="fantasy-sound.mp3"></audio>
+
+  <div class="preloader" id="preloader">
+    <img src="dog-running.gif" alt="Running Dog" class="running-dog">
+  </div>
+
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <h2>Login to GameOn</h2>
+      <form id="loginForm">
+        <input type="text" id="username" placeholder="Choose a Username" required>
+        <input type="email" id="email" placeholder="Email Address" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="button" onclick="sendVerificationEmail()">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo">
+      <h1>Game<span>On</span></h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#games">Games</a></li>
+        <li><a href="#leaderboard">Leaderboard</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+  <div id="background-color-picker">
+    <label for="colorPicker">Choose Background Color: </label>
+    <input type="color" id="colorPicker" value="#ffffff" onchange="updateBackgroundColor()">
+  </div>
+
+  <main>
+    <section id="home" class="hero">
+      <h2>Welcome to GameOn!</h2>
+      <p>Your ultimate destination for games, high scores, and endless fun.</p>
+      <a href="#games" class="cta-button">Start Playing</a>
+    </section>
+
+    <section id="games" class="games">
+      <h2>Our Games</h2>
+      <div class="game-grid">
+        <div class="game-item">
+          <h3>Pixel Runner</h3>
+          <p>A fast-paced adventure through endless obstacles.</p>
+        </div>
+        <div class="game-item">
+          <h3>Battle Quest</h3>
+          <p>Embark on a heroic journey to save the kingdom!</p>
+        </div>
+        <div class="game-item">
+          <h3>Cyber Race</h3>
+          <p>Compete with friends in this futuristic racing game.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard">
+      <h2>Leaderboard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>PlayerOne</td>
+            <td>1500</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>SpeedyGamer</td>
+            <td>1400</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>QuestMaster</td>
+            <td>1350</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Contact Us</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="submit">Send</button>
+      </form>
+    </section>
+
+    <section id="avatar" class="avatar-creator">
+      <h2>Create Your Avatar</h2>
+      <div class="avatar-preview" id="avatarPreview">
+        <img src="" alt="Avatar Preview" id="avatarImage">
+      </div>
+      <div class="avatar-options">
+        <label for="avatarFile">Upload your avatar:</label>
+        <input type="file" id="avatarFile" accept="image/*" onchange="previewAvatar()">
+      </div>
+    </section>
+  </main>
+
+  <div class="chat-container">
+    <div class="chat-header">Chat</div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+      <input type="text" id="chatInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 GameOn. All Rights Reserved.</p>
+  </footer>
+
+  <div class="cookie-banner" id="cookieBanner">
+    <p>We use cookies to enhance your experience on our site. By continuing to browse, you accept our use of cookies.</p>
+    <button onclick="acceptCookies()">Accept</button>
+  </div>
+
+  <script>
+    // Preloader logic
+    window.onload = function() {
+      setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        preloader.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+      }, 3000); // Simulate loading time
+
+      // Play fantasy sound
+      const fantasySound = document.getElementById('fantasySound');
+      fantasySound.play();
+
+      const modal = document.getElementById('loginModal');
+      modal.style.display = 'flex';
+
+      const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+      if (!cookiesAccepted) {
+        document.getElementById('cookieBanner').style.display = 'flex';
+      }
+    };
+
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+    }
+
+    function sendVerificationEmail() {
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (username && email && password) {
+        alert(`Verification email sent to ${email}. Welcome, ${username}!`);
+        document.getElementById('loginModal').style.display = 'none';
+      } else {
+        alert('Please fill out all fields.');
+      }
+    }
+
+    function previewAvatar() {
+      const fileInput = document.getElementById('avatarFile');
+      const avatarImage = document.getElementById('avatarImage');
+
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatarImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function sendMessage() {
+      const chatInput = document.getElementById('chatInput');
+      const chatMessages = document.getElementById('chatMessages');
+      const message = chatInput.value;
+
+      if (message.trim() !== '') {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
+        chatInput.value = '';
+      }
+    }
+
+    function updateBackgroundColor() {
+      const colorPicker = document.getElementById('colorPicker');
+      document.body.style.backgroundColor = colorPicker.value;
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('cookiesAccepted', 'true');
+      document.getElementById('cookieBanner').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+is workflow will build and push a new container image to Amazon ECR,
+# and then will deploy a new task definition to Amazon ECS, when there is a push to the "main" branch.
+#
+# To use this workflow, you will need to complete the following set-up steps:
+#
+# 1. Create an ECR repository to store your images.
+#    For example: `aws ecr create-repository --repository-name my-ecr-repo --region us-east-2`.
+#    Replace the value of the `ECR_REPOSITORY` environment variable in the workflow below with your repository's name.
+#    Replace the value of the `AWS_REGION` environment variable in the workflow below with your repository's region.
+#
+# 2. Create an ECS task definition, an ECS cluster, and an ECS service.
+#    For example, follow the Getting Started guide on the ECS console:
+#      https://us-east-2.console.aws.amazon.com/ecs/home?region=us-east-2#/firstRun
+#    Replace the value of the `ECS_SERVICE` environment variable in the workflow below with the name you set for the Amazon ECS service.
+#    Replace the value of the `ECS_CLUSTER` environment variable in the workflow below with the name you set for the cluster.
+#
+# 3. Store your ECS task definition as a JSON file in your repository.
+#    The format should follow the output of `aws ecs register-task-definition --generate-cli-skeleton`.
+#    Replace the value of the `ECS_TASK_DEFINITION` environment variable in the workflow below with the path to the JSON file.
+#    Replace the value of the `CONTAINER_NAME` environment variable in the workflow below with the name of the container
+#    in the `containerDefinitions` section of the task definition.
+#
+# 4. Store an IAM user access key in GitHub Actions secrets named `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
+#    See the documentation for each action used below for the recommended IAM policies for this IAM user,
+#    and best practices on handling the access key credentials.
+
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: MY_AWS_REGION                   # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: MY_ECR_REPOSITORY           # set this to your Amazon ECR repository name
+  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
+                                               # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
+                                               # containerDefinitions section of your task definition
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        # Build a docker container and
+        # push it to ECR so that it can
+        # be deployed to ECS.
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION }}
+        container-name: ${{ env.CONTAINER_NAME }}
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: ${{ env.ECS_SERVICE }}
+        cluster: ${{ env.ECS_CLUSTER }}
+        wait-for-service-stability: true
